@@ -2,7 +2,9 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
 """
-Final acc is 0.91 and crash in the last step
+Final acc is 0.91 and crash in the last step acc is 0.0098 due to overfitting
+using l2 loss can handle this but acc is 0.87
+using l2 loss with weight acc is 0.90
 """
 
 class Mnist_fc(object):
@@ -22,7 +24,7 @@ class Mnist_fc(object):
         w = tf.Variable(tf.truncated_normal([784, 10],mean=0.2,stddev=0.5))
         bias = tf.Variable(tf.truncated_normal([10],mean=0.2,stddev=0.5))
         pred_y = tf.nn.softmax(tf.matmul(self.x, w) + bias)
-        cost = tf.reduce_mean(-tf.reduce_sum(self.y * tf.log(pred_y)))
+        cost = tf.reduce_mean(-tf.reduce_sum(self.y * tf.log(pred_y))) + 0.2 * tf.reduce_mean(tf.nn.l2_loss(w))
         return pred_y, cost
     
     def train(self):
